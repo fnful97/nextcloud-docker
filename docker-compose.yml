@@ -1,0 +1,32 @@
+services:
+  db:
+    image: mariadb:10.11
+    container_name: nextcloud_db
+    restart: always
+    command: --innodb_buffer_pool_size=1G 
+    environment:
+      MYSQL_ROOT_PASSWORD: #Root password
+      MYSQL_PASSWORD: #normal passkey
+      MYSQL_USER: #user 
+      MYSQL_DATABASE: nextcloud
+    volumes:
+      - /opt/nextcloud/mysql:/var/lib/mysql # < "default dir"
+
+  app:
+    image: nextcloud:latest
+    container_name: nextcloud_app
+    restart: always
+    ports:
+      - 8080:80 # < that goes with the ip the ports need to be in your yml if you dont you will only get a 404 error 
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER= #sql user
+      - MYSQL_PASSWORD= #password for the sql not admin
+      - NEXTCLOUD_ADMIN_USER= #admin user
+      - NEXTCLOUD_ADMIN_PASSWORD= #root/admin password
+      - NEXTCLOUD_TRUSTED_DOMAINS= #your ip
+    volumes:
+      - /opt/nextcloud/html:/var/www/html
+    depends_on:
+      - db

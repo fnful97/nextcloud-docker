@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+echo "Updating package lists"
+sudo apt update -y
+
+echo "Installing core utilities"
+sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
+
+echo "Installing Docker ecosystem"
+# Assuming you have the Docker repository configured already:
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+echo "docker waking up for systemd"
+sudo systemctl enable --now docker
+
+echo "Docker starting waking up if you encounter an error is better to install them manually."
